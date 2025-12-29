@@ -41,9 +41,12 @@ class SessionService {
                 'tickets.isBooked': { $eq: false }
             },
             {
-                $set: { 'tickets.$.customer': customerData }
-            },
-            { new: true }
+                $set: {
+                    'tickets.$.booking_details_id': booking_details_id ,
+                    'tickets.$.isBooked':true
+                }
+
+            }
         );
     }
 }
