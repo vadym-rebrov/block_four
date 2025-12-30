@@ -1,0 +1,27 @@
+import { Injectable } from '@nestjs/common';
+import { InjectModel } from '@nestjs/mongoose';
+import { Model } from 'mongoose';
+import { Room, RoomDocument } from './room.model';
+import {SaveRoomDto} from "./dto/saveRoom.dto";
+
+
+@Injectable()
+export class RoomRepository {
+    constructor(
+        @InjectModel(Room.name) private readonly model: Model<RoomDocument>,
+    ) {}
+
+    async get(id: string): Promise<Room | null> {
+        return this.model.findById(id).lean();
+    }
+
+    async getByRoomNumber(roomNumber: number): Promise<Room | null> {
+        return this.model.findOne({ roomNumber }).lean();
+    }
+
+    async create(data: SaveRoomDto): Promise<string> {
+        const room = await this.model.create(data);
+        return room.id;
+    }
+
+}
