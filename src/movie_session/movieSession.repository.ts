@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
-import {MovieSession, MovieSessionDocument} from './movie_session.model';
+import {MovieSession, MovieSessionDocument} from './movieSession.schema';
 import {SaveMovieSessionDto} from "./dto/saveMovieSession.dto";
 
 @Injectable()

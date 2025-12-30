@@ -1,5 +1,5 @@
 import {Injectable} from "@nestjs/common";
-import {MovieSessionRepository} from "./movie_session.repository";
+import {MovieSessionRepository} from "./movieSession.repository";
 import {StudentRepository} from "../student/student.repository";
 import {GroupService} from "../group/group.service";
 import {SaveMovieSessionDto} from "./dto/saveMovieSession.dto";

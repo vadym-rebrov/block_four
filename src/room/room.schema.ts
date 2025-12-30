@@ -18,7 +18,7 @@ export class Room {
     @Prop({ required: true, unique: true, index: true })
     roomNumber: number;
 
-    @Prop({ min: 0 })
+    @Prop({ min: 1 })
     capacity: number;
 
     @Prop({ default: 'STANDARD', trim: true })

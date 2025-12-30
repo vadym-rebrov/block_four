@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
-import { Room, RoomDocument } from './room.model';
+import { Room, RoomDocument } from './room.schema';
 import {SaveRoomDto} from "./dto/saveRoom.dto";
 
 
