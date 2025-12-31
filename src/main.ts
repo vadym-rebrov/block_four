@@ -2,7 +2,7 @@ import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { ConfigService } from '@nestjs/config';
 import { Logger, ValidationPipe } from '@nestjs/common';
-import banner from '../../upd/resources/banner';
+import banner from '../resources/banner';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
