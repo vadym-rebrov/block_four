@@ -4,6 +4,10 @@ import { MongooseModule } from '@nestjs/mongoose';
 import { HealthController } from './health/health.controller';
 import { GroupModule } from './group/group.module';
 import { StudentModule } from './student/student.module';
+import {MovieSession} from "./movie_session/movieSession.schema";
+import {MovieSessionModule} from "./movie_session/movieSession.module";
+import {SeedService} from "./seed/seed.service";
+import {RoomModule} from "./room/room.module";
 
 @Module({
   imports: [
@@ -19,6 +23,12 @@ import { StudentModule } from './student/student.module';
     }),
     GroupModule,
     StudentModule,
+    MovieSessionModule,
+    RoomModule
+
+  ],
+  providers:[
+    SeedService
   ],
   controllers: [HealthController],
 })

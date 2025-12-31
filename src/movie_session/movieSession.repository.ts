@@ -10,7 +10,7 @@ import {RoomRepository} from "../room/room.repository";
 export class MovieSessionRepository {
     constructor(
         @InjectModel(MovieSession.name) private readonly sessionModel: Model<MovieSessionDocument>,
-        @InjectModel(Room.name) private readonly roomRepository : RoomRepository
+        private readonly roomRepository: RoomRepository,
     ) {}
 
     async getById(id: string): Promise<MovieSession | null> {

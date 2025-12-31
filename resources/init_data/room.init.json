@@ -1,0 +1,54 @@
+[
+  {
+    "roomNumber": 1,
+    "capacity": 20,
+    "type": "STANDARD",
+    "seatsTemplate": [
+      { "rowNumber": 1, "seatNumber": 1 }, { "rowNumber": 1, "seatNumber": 2 }, { "rowNumber": 1, "seatNumber": 3 }, { "rowNumber": 1, "seatNumber": 4 }, { "rowNumber": 1, "seatNumber": 5 },
+      { "rowNumber": 2, "seatNumber": 1 }, { "rowNumber": 2, "seatNumber": 2 }, { "rowNumber": 2, "seatNumber": 3 }, { "rowNumber": 2, "seatNumber": 4 }, { "rowNumber": 2, "seatNumber": 5 },
+      { "rowNumber": 3, "seatNumber": 1 }, { "rowNumber": 3, "seatNumber": 2 }, { "rowNumber": 3, "seatNumber": 3 }, { "rowNumber": 3, "seatNumber": 4 }, { "rowNumber": 3, "seatNumber": 5 },
+      { "rowNumber": 4, "seatNumber": 1 }, { "rowNumber": 4, "seatNumber": 2 }, { "rowNumber": 4, "seatNumber": 3 }, { "rowNumber": 4, "seatNumber": 4 }, { "rowNumber": 4, "seatNumber": 5 }
+    ]
+  },
+  {
+    "roomNumber": 2,
+    "capacity": 30,
+    "type": "IMAX",
+    "seatsTemplate": [
+      { "rowNumber": 1, "seatNumber": 1 }, { "rowNumber": 1, "seatNumber": 2 }, { "rowNumber": 1, "seatNumber": 3 }, { "rowNumber": 1, "seatNumber": 4 }, { "rowNumber": 1, "seatNumber": 5 }, { "rowNumber": 1, "seatNumber": 6 },
+      { "rowNumber": 2, "seatNumber": 1 }, { "rowNumber": 2, "seatNumber": 2 }, { "rowNumber": 2, "seatNumber": 3 }, { "rowNumber": 2, "seatNumber": 4 }, { "rowNumber": 2, "seatNumber": 5 }, { "rowNumber": 2, "seatNumber": 6 },
+      { "rowNumber": 3, "seatNumber": 1 }, { "rowNumber": 3, "seatNumber": 2 }, { "rowNumber": 3, "seatNumber": 3 }, { "rowNumber": 3, "seatNumber": 4 }, { "rowNumber": 3, "seatNumber": 5 }, { "rowNumber": 3, "seatNumber": 6 },
+      { "rowNumber": 4, "seatNumber": 1 }, { "rowNumber": 4, "seatNumber": 2 }, { "rowNumber": 4, "seatNumber": 3 }, { "rowNumber": 4, "seatNumber": 4 }, { "rowNumber": 4, "seatNumber": 5 }, { "rowNumber": 4, "seatNumber": 6 },
+      { "rowNumber": 5, "seatNumber": 1 }, { "rowNumber": 5, "seatNumber": 2 }, { "rowNumber": 5, "seatNumber": 3 }, { "rowNumber": 5, "seatNumber": 4 }, { "rowNumber": 5, "seatNumber": 5 }, { "rowNumber": 5, "seatNumber": 6 }
+    ]
+  },
+  {
+    "roomNumber": 3,
+    "capacity": 8,
+    "type": "VIP",
+    "seatsTemplate": [
+      { "rowNumber": 1, "seatNumber": 1 }, { "rowNumber": 1, "seatNumber": 2 }, { "rowNumber": 1, "seatNumber": 3 }, { "rowNumber": 1, "seatNumber": 4 },
+      { "rowNumber": 2, "seatNumber": 1 }, { "rowNumber": 2, "seatNumber": 2 }, { "rowNumber": 2, "seatNumber": 3 }, { "rowNumber": 2, "seatNumber": 4 }
+    ]
+  },
+  {
+    "roomNumber": 4,
+    "capacity": 15,
+    "type": "STANDARD",
+    "seatsTemplate": [
+      { "rowNumber": 1, "seatNumber": 1 }, { "rowNumber": 1, "seatNumber": 2 }, { "rowNumber": 1, "seatNumber": 3 }, { "rowNumber": 1, "seatNumber": 4 }, { "rowNumber": 1, "seatNumber": 5 },
+      { "rowNumber": 2, "seatNumber": 1 }, { "rowNumber": 2, "seatNumber": 2 }, { "rowNumber": 2, "seatNumber": 3 }, { "rowNumber": 2, "seatNumber": 4 }, { "rowNumber": 2, "seatNumber": 5 },
+      { "rowNumber": 3, "seatNumber": 1 }, { "rowNumber": 3, "seatNumber": 2 }, { "rowNumber": 3, "seatNumber": 3 }, { "rowNumber": 3, "seatNumber": 4 }, { "rowNumber": 3, "seatNumber": 5 }
+    ]
+  },
+  {
+    "roomNumber": 5,
+    "capacity": 12,
+    "type": "4DX",
+    "seatsTemplate": [
+      { "rowNumber": 1, "seatNumber": 1 }, { "rowNumber": 1, "seatNumber": 2 }, { "rowNumber": 1, "seatNumber": 3 }, { "rowNumber": 1, "seatNumber": 4 },
+      { "rowNumber": 2, "seatNumber": 1 }, { "rowNumber": 2, "seatNumber": 2 }, { "rowNumber": 2, "seatNumber": 3 }, { "rowNumber": 2, "seatNumber": 4 },
+      { "rowNumber": 3, "seatNumber": 1 }, { "rowNumber": 3, "seatNumber": 2 }, { "rowNumber": 3, "seatNumber": 3 }, { "rowNumber": 3, "seatNumber": 4 }
+    ]
+  }
+]

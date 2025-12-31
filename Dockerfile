@@ -13,6 +13,7 @@ RUN npm ci
 FROM node:18 as builder
 WORKDIR /app
 COPY --from=build-dependencies /app/node_modules node_modules
+COPY --from=builder /app/resources ./resources
 COPY ../upd .
 RUN npm run build
 

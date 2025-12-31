@@ -24,4 +24,14 @@ export class RoomRepository {
         return room.id;
     }
 
+    async createMany(data: SaveRoomDto[]) : Promise<string []>{
+        const rooms = await this.model.insertMany(data);
+        return rooms.map(room => room.id);
+    }
+
+    async isEmpty() : Promise<boolean> {
+        const count = await this.model.countDocuments({});
+        return count === 0;
+    }
+
 }
