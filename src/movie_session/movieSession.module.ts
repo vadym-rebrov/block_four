@@ -5,6 +5,8 @@ import {MovieSessionRepository} from "./movieSession.repository";
 import {MovieSessionController} from "./movieSession.controller";
 import {MovieSessionService} from "./movieSession.service";
 import { RoomModule } from '../room/room.module';
+import {MovieService} from "../movie/movie.service";
+import {MovieModule} from "../movie/movie.module";
 
 @Module({
     imports: [
@@ -14,7 +16,8 @@ import { RoomModule } from '../room/room.module';
                 schema: MovieSessionSchema,
             },
         ]),
-        RoomModule
+        RoomModule,
+        MovieModule
     ],
     providers: [MovieSessionService, MovieSessionRepository],
     controllers: [MovieSessionController],
