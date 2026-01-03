@@ -7,15 +7,15 @@ export class MovieSessionQueryDto {
     @IsInt()
     movieId: number;
 
-    @IsOptional()
     @Type(() => Number)
     @IsInt()
     @Min(1)
-    size?: number = 10;
-
     @IsOptional()
+    size: number = 10;
+
     @Type(() => Number)
     @IsInt()
     @Min(0)
-    from?: number = 0;
+    @IsOptional()
+    from: number = 0;
 }

@@ -7,6 +7,7 @@ import {Room, RoomDocument} from "../room/room.schema";
 import {RoomRepository} from "../room/room.repository";
 import {MovieService} from "../movie/movie.service";
 import {MovieSessionQueryDto} from "./dto/movieSessionQueryDto";
+import {CountByIdArrayQuery} from "./dto/countByIdArrayQuery";
 
 @Injectable()
 export class MovieSessionRepository {
@@ -20,9 +21,7 @@ export class MovieSessionRepository {
         return this.sessionModel.findById(id).lean();
     }
 
-    async findAll(query: MovieSessionQueryDto): Promise<MovieSession[]> {
-
-
+    async findByQuery(query: MovieSessionQueryDto): Promise<MovieSession[]> {
         return this.sessionModel.find({
             'movie.ext_id': query.movieId
         })
@@ -77,8 +76,35 @@ export class MovieSessionRepository {
 
     }
 
-    async update(id: string, data: SaveMovieSessionDto): Promise<void> {
-        await this.sessionModel.updateOne({ _id: id }, { $set: data });
+    public async countByMovieIds(idsArray : [number]) : Promise<Map<string, number>> {
+        let result  = await this.sessionModel.aggregate(
+            [
+                {
+                    $match:{
+                        'movie.ext_id' : {$in:idsArray }
+                    }
+                },
+                {
+                    $group:{
+                        _id: '$movie.ext_id',
+                        count: {$sum:1}
+                    }
+                },
+                {
+                    $sort: { count: -1 }
+                }
+            ]
+        );
+        const keyPredicate = 'id';
+        const finalStats = new Map<string, number>();
+        idsArray.forEach(id => {
+            finalStats[keyPredicate+id] = 0;
+        });
+
+        result.forEach(item => {
+            finalStats[keyPredicate+item._id] = item.count;
+        });
+        return finalStats;
     }
 
 }
