@@ -3,7 +3,8 @@ import {MovieSessionRepository} from "./movieSession.repository";
 
 import {SaveMovieSessionDto} from "./dto/saveMovieSession.dto";
 import {MovieSessionQueryDto} from "./dto/movieSessionQueryDto";
-import {CountByIdArrayQuery} from "./dto/countByIdArrayQuery";
+import {CountByIdArrayDto} from "./dto/countByIdArrayDto";
+import {CountByIdArrayResponseDto} from "./dto/countByIdArrayResponseDto";
 
 @Injectable()
 export class MovieSessionService {
@@ -11,15 +12,16 @@ export class MovieSessionService {
         private readonly movieSessionRepository: MovieSessionRepository
     ) {}
 
-    public create(saveDto : SaveMovieSessionDto){
+    public async create(saveDto : SaveMovieSessionDto){
         return this.movieSessionRepository.create(saveDto);
     }
 
-    public findByQuery(query: MovieSessionQueryDto){
+    public async findByQuery(query: MovieSessionQueryDto){
         return this.movieSessionRepository.findByQuery(query);
     }
 
-    public countByMovieId(array: CountByIdArrayQuery) {
-        return this.movieSessionRepository.
+    public async countByMovieId(array: CountByIdArrayDto) {
+        let countData = await this.movieSessionRepository.countByMovieIds(array.movieIds);
+        return new CountByIdArrayResponseDto(PcountData);
     }
 }

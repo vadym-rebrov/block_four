@@ -3,7 +3,7 @@ import {StudentService} from "../student/student.service";
 import {MovieSessionService} from "./movieSession.service";
 import {SaveMovieSessionDto} from "./dto/saveMovieSession.dto";
 import {MovieSessionQueryDto} from "./dto/movieSessionQueryDto";
-import {CountByIdArrayQuery} from "./dto/countByIdArrayQuery";
+import {CountByIdArrayDto} from "./dto/countByIdArrayDto";
 
 @Controller('movie-session')
 export class MovieSessionController{
@@ -20,7 +20,7 @@ export class MovieSessionController{
     }
 
     @Post('_counts')
-    async countByMovieId(array : CountByIdArrayQuery){
+    async countByMovieId(@Body() array : CountByIdArrayDto){
         return this.movieSessionService.countByMovieId(array);
     }
 }

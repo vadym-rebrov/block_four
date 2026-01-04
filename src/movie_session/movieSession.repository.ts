@@ -7,7 +7,7 @@ import {Room, RoomDocument} from "../room/room.schema";
 import {RoomRepository} from "../room/room.repository";
 import {MovieService} from "../movie/movie.service";
 import {MovieSessionQueryDto} from "./dto/movieSessionQueryDto";
-import {CountByIdArrayQuery} from "./dto/countByIdArrayQuery";
+import {CountByIdArrayDto} from "./dto/countByIdArrayDto";
 
 @Injectable()
 export class MovieSessionRepository {
@@ -76,35 +76,38 @@ export class MovieSessionRepository {
 
     }
 
-    public async countByMovieIds(idsArray : [number]) : Promise<Map<string, number>> {
-        let result  = await this.sessionModel.aggregate(
-            [
-                {
-                    $match:{
-                        'movie.ext_id' : {$in:idsArray }
-                    }
-                },
-                {
-                    $group:{
-                        _id: '$movie.ext_id',
-                        count: {$sum:1}
-                    }
-                },
-                {
-                    $sort: { count: -1 }
+    public async countByMovieIds(idsArray: number[]): Promise<Map<string, number>> {
+        const result = await this.sessionModel.aggregate([
+            {
+                $match: {
+                    'movie.ext_id': { $in: idsArray }
                 }
-            ]
-        );
+            },
+            {
+                $group: {
+                    _id: '$movie.ext_id',
+                    count: { $sum: 1 }
+                }
+            }
+        ]);
+
         const keyPredicate = 'id';
-        const finalStats = new Map<string, number>();
+        const tempMap = new Map<string, number>();
         idsArray.forEach(id => {
-            finalStats[keyPredicate+id] = 0;
+            tempMap.set(keyPredicate + id, 0);
+        });
+        result.forEach(item => {
+            tempMap.set(keyPredicate + item._id, item.count);
         });
 
-        result.forEach(item => {
-            finalStats[keyPredicate+item._id] = item.count;
-        });
-        return finalStats;
+        const sortedStats = new Map(
+            [...tempMap.entries()].sort((a, b) => {
+                return b[1] - a[1];
+            })
+        );
+
+        console.log(sortedStats)
+        return sortedStats;
     }
 
 }
