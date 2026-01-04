@@ -22,6 +22,6 @@ export class MovieSessionService {
 
     public async countByMovieId(array: CountByIdArrayDto) {
         let countData = await this.movieSessionRepository.countByMovieIds(array.movieIds);
-        return new CountByIdArrayResponseDto(PcountData);
+        return new CountByIdArrayResponseDto(countData);
     }
 }
