@@ -42,7 +42,7 @@ This service implements the logic for **Entity 3 (Movie Session)**. It is design
     Create a `.env` file in the root directory or ensure environment variables are set:
     ```env
     PORT=3000
-    MONGO_ADDRESS=mongodb://localhost:27017/your-database
+    MONGO_ADDRESS=mongodb://localhost:27017/movies_db_2
     MOVIE_SERVICE_URL=http://localhost:8080/api/movie
     ```
 
