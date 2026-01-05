@@ -39,7 +39,15 @@ export class MovieSession {
     @Prop({ default: Date.now })
     start: Date;
 
-    @Prop({ required: true })
+    @Prop({
+            required: true,
+            validate: {
+                validator: function (value: Date) {
+                    return this.start <= value;
+                },
+                message: 'End time must be after start time'
+            }
+    })
     end: Date;
 
     @Prop({ required: true, index: true, min: 1 })

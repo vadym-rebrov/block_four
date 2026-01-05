@@ -8,6 +8,7 @@ import {RoomRepository} from "../room/room.repository";
 import {MovieService} from "../movie/movie.service";
 import {MovieSessionQueryDto} from "./dto/movieSessionQueryDto";
 import {CountByIdArrayDto} from "./dto/countByIdArrayDto";
+import {SaveRoomDto} from "../room/dto/saveRoom.dto";
 
 @Injectable()
 export class MovieSessionRepository {
@@ -28,6 +29,12 @@ export class MovieSessionRepository {
         .sort({ start: -1 })
         .skip(query.from)
         .limit(query.size).lean();
+    }
+
+    async countByMovieId(movieId:number) : Promise<number>{
+        return this.sessionModel.countDocuments({
+            'movie.ext_id': movieId
+        });
     }
 
     async create(data: SaveMovieSessionDto): Promise<string> {
@@ -73,7 +80,6 @@ export class MovieSessionRepository {
                 { end: { $gt: start } }
             ]
         }).exec();
-
     }
 
     public async countByMovieIds(idsArray: number[]): Promise<Map<string, number>> {
@@ -109,5 +115,16 @@ export class MovieSessionRepository {
         console.log(sortedStats)
         return sortedStats;
     }
+
+    async createMany(data: SaveRoomDto[]) : Promise<string []>{
+        const sessions = await this.sessionModel.insertMany(data);
+        return sessions.map(room => room.id);
+    }
+
+    async isEmpty() : Promise<boolean> {
+        const count = await this.sessionModel.countDocuments({});
+        return count === 0;
+    }
+
 
 }

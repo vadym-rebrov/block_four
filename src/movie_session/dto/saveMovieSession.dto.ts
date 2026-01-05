@@ -11,6 +11,7 @@ import {
     IsNotEmpty,
     IsNumber
 } from 'class-validator';
+import {IsAfter} from "../../common/validators/isAfter";
 
 
 export class TicketDto {
@@ -49,6 +50,7 @@ export class SaveMovieSessionDto{
     start: string;
 
     @IsDateString()
+    @IsAfter('start', { message: 'End date must be after start date' })
     end: string;
 
     @IsInt()
