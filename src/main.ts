@@ -20,7 +20,7 @@ async function bootstrap() {
 
   await app.listen(port, host);
   Logger.log(banner);
-  Logger.log(`🚀 Example app listening on port: ${host}:${port}`);
+  Logger.log(`🚀 Block four app listening on port: ${host}:${port}`);
   app.enableCors();
 }
 
