@@ -55,7 +55,7 @@ export class SaveMovieSessionDto{
 
     @IsInt()
     @Min(1)
-    room_number: number;
+    roomNumber: number;
 
     @IsOptional()
     @ValidateNested({ each: true })

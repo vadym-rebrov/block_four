@@ -1,10 +1,10 @@
 version: '3.9'
 services:
-  nestjs-mongo-sample:
-    build: ../upd
+  movie-session-service:
+    build: .
     restart: on-failure
     ports:
-      - '7777:7777'
+      - '3000:3000'
     depends_on:
       mongo:
         condition: service_healthy
@@ -12,13 +12,14 @@ services:
       - default
     environment:
       - HOST=0.0.0.0
-      - PORT=7777
-      - MONGO_ADDRESS=mongodb://mongo:27017/mySampleDb
+      - PORT=3000
+      - MONGO_ADDRESS=mongodb://mongo:27017/movie-session-db
+      - MOVIE_SERVICE_URL=http://host.docker.internal:8080/api/movie
 
   mongo:
     image: mongo:8.0.4
     ports:
-      - '27017:27017'
+      - '27018:27017'
     volumes:
       - ./docker/data/mongo/db:/data/db
     networks:

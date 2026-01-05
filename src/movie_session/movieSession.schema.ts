@@ -33,6 +33,8 @@ export type MovieSessionDocument = HydratedDocument<MovieSession>;
 
 @Schema({ timestamps: { createdAt: 'created_at', updatedAt: false } })
 export class MovieSession {
+    id: Types.ObjectId;
+
     @Prop({ type: MovieSchema, required: true })
     movie: Movie;
 
@@ -51,7 +53,7 @@ export class MovieSession {
     end: Date;
 
     @Prop({ required: true, index: true, min: 1 })
-    room_number: number;
+    roomNumber: number;
 
     @Prop({ type: [TicketSchema], default: [] })
     tickets: Ticket[];

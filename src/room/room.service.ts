@@ -14,8 +14,4 @@ export class RoomService {
         return this.roomRepository.getByRoomNumber(roomNumber);
     }
 
-    // async create(data: CreateRoomDto): Promise<string> {
-    //     return this.roomRepository.create(data);
-    // }
-
 }

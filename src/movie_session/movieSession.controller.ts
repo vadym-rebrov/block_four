@@ -1,4 +1,4 @@
-import {Body, Controller, Get, Post, Query} from "@nestjs/common";
+import {Body, Controller, Get, HttpCode, Post, Query} from "@nestjs/common";
 import {MovieSessionService} from "./movieSession.service";
 import {SaveMovieSessionDto} from "./dto/saveMovieSession.dto";
 import {MovieSessionQueryDto} from "./dto/movieSessionQueryDto";
@@ -21,6 +21,7 @@ export class MovieSessionController{
     }
 
     @Post('_counts')
+    @HttpCode(200)
     async countByMovieId(@Body() array : CountByIdArrayDto):Promise<CountByIdArrayResponseDto>{
         return this.movieSessionService.countByMovieId(array);
     }

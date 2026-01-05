@@ -1,99 +1,357 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="120" alt="Nest Logo" /></a>
-</p>
+# Movie Session Service
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+## Domain Description
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://coveralls.io/github/nestjs/nest?branch=master" target="_blank"><img src="https://coveralls.io/repos/github/nestjs/nest/badge.svg?branch=master#9" alt="Coverage" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg" alt="Donate us"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow" alt="Follow us on Twitter"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+This service implements the logic for **Entity 3 (Movie Session)**. It is designed to manage movie screenings in a cinema system.
 
-## Description
+**Entities:**
+* **Entity 1 (Movie):** Represents the movie itself. This is an external entity managed by a separate service. The Session Service validates the existence of a movie via an HTTP request to the Movie Service.
+* **Entity 3 (Movie Session):** Represents a specific screening of a movie in a specific room at a specific time.
+    * **Relationship:** Many-to-One (Many sessions can exist for one movie).
+    * **Attributes:** Start time, End time, Room number, Ticket availability.
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+**Features:**
+* **Creation:** Allows creating a new session. It validates:
+    * Existence of the Movie (via external API).
+    * Existence of the Room (internal database).
+    * **Time constraints:** `end` time must be strictly greater than `start` time.
+    * **Overlaps:** Ensures no two sessions in the same room overlap in time.
+* **Listing:** Retrieves a paginated list of sessions for a specific movie, sorted by start time (descending).
+* **Aggregation:** Provides a bulk counter endpoint to get the number of sessions for a list of movie IDs using MongoDB Aggregation Framework.
 
-## Project setup
+---
 
-```bash
-$ npm install
+## How to Run
+
+### Prerequisites
+* Node.js (v18+)
+* Docker & Docker Compose
+* Run Java Spring Service from : https://github.com/vadym-rebrov/BlockTwo
+### Option 1: Using Docker Compose
+
+1.  Ensure Docker is running.
+2.  Run the application and the MongoDB database:
+    ```bash
+    docker-compose up --build
+    ```
+3.  The service will be available at `http://localhost:3000`.
+
+### Option 2: Local Setup
+
+1.  **Environment Setup:**
+    Create a `.env` file in the root directory or ensure environment variables are set:
+    ```env
+    PORT=3000
+    MONGO_ADDRESS=mongodb://localhost:27017/your-database
+    MOVIE_SERVICE_URL=http://localhost:8080/api/movie
+    ```
+
+2.  **Install Dependencies:**
+    ```bash
+    npm install
+    ```
+
+3.  **Start the Application:**
+    ```bash
+    npm run start:dev
+    ```
+
+---
+
+## API Usage Examples
+
+### 1. Create a Movie Session
+**Endpoint:** `POST /api/movie-session`
+
+#### Valid Request
+Creates a session for movie ID `101` in room `1`.
+```
+{
+    "movie": {
+      "ext_id": 442,
+      "title": "Gone with the Wind"
+    },
+    "roomNumber": 5,
+    "start": "2025-10-20T18:00:00.000Z",
+    "end": "2025-10-20T21:00:00.000Z"
+}
 ```
 
-## Compile and run the project
-
-```bash
-# development
-$ npm run start
-
-# watch mode
-$ npm run start:dev
-
-# production mode
-$ npm run start:prod
+#### Invalid Request
+End date is before Start date.
+```
+    "movie": {
+      "ext_id": 442,
+      "title": "Gone with the Wind"
+    },
+    "roomNumber": 5,
+    "start": "2025-10-20T21:00:00.000Z",
+    "end": "2025-10-20T18:00:00.000Z"
 ```
 
-## Run tests
-
-```bash
-# unit tests
-$ npm run test
-
-# e2e tests
-$ npm run test:e2e
-
-# test coverage
-$ npm run test:cov
+#### Invalid Request
+Session overlaps with an existing one in the same room.
+```
+    "movie": {
+      "ext_id": 442,
+      "title": "Gone with the Wind"
+    },
+    "roomNumber": 5,
+    "start": "2025-10-20T18:00:00.000Z",
+    "end": "2025-10-20T21:00:00.000Z"
 ```
 
-## Deployment
-
-When you're ready to deploy your NestJS application to production, there are some key steps you can take to ensure it runs as efficiently as possible. Check out the [deployment documentation](https://docs.nestjs.com/deployment) for more information.
-
-If you are looking for a cloud-based platform to deploy your NestJS application, check out [Mau](https://mau.nestjs.com), our official platform for deploying NestJS applications on AWS. Mau makes deployment straightforward and fast, requiring just a few simple steps:
-
-```bash
-$ npm install -g mau
-$ mau deploy
+**Response:**
+```
+{
+    "message": "Room 5 is already booked from Thu Jan 02 2025 14:00:00 GMT+0000 (Coordinated Universal Time) to Thu Jan 02 2025 17:00:00 GMT+0000 (Coordinated Universal Time)",
+    "error": "Conflict",
+    "statusCode": 409
+}
 ```
 
-With Mau, you can deploy your application in just a few clicks, allowing you to focus on building features rather than managing infrastructure.
+### 2. Get Sessions by Movie ID
+**Endpoint:** `GET /api/movie-session`
 
-## Resources
+#### Valid Request
+Fetches sessions for movie 12 with pagination.
 
-Check out a few resources that may come in handy when working with NestJS:
+GET /api/movie-session?movieId=12&size=5&from=0
 
-- Visit the [NestJS Documentation](https://docs.nestjs.com) to learn more about the framework.
-- For questions and support, please visit our [Discord channel](https://discord.gg/G7Qnnhy).
-- To dive deeper and get more hands-on experience, check out our official video [courses](https://courses.nestjs.com/).
-- Deploy your application to AWS with the help of [NestJS Mau](https://mau.nestjs.com) in just a few clicks.
-- Visualize your application graph and interact with the NestJS application in real-time using [NestJS Devtools](https://devtools.nestjs.com).
-- Need help with your project (part-time to full-time)? Check out our official [enterprise support](https://enterprise.nestjs.com).
-- To stay in the loop and get updates, follow us on [X](https://x.com/nestframework) and [LinkedIn](https://linkedin.com/company/nestjs).
-- Looking for a job, or have a job to offer? Check out our official [Jobs board](https://jobs.nestjs.com).
+```
+{
+    "list": [
+        {
+            "id": "695bea809570e692b99ad377",
+            "movie": {
+                "ext_id": 12,
+                "title": "The Widening Gyre"
+            },
+            "start": "2026-01-15T18:02:00.000Z",
+            "end": "2026-01-15T20:29:00.000Z",
+            "roomNumber": 3,
+            "tickets": [
+                {
+                    "rowNumber": 1,
+                    "seatNumber": 1,
+                    "isBooked": false
+                },
+                {
+                    "rowNumber": 1,
+                    "seatNumber": 2,
+                    "isBooked": false
+                },
+                {
+                    "rowNumber": 1,
+                    "seatNumber": 3,
+                    "isBooked": false
+                },
+                {
+                    "rowNumber": 1,
+                    "seatNumber": 4,
+                    "isBooked": false
+                },
+                {
+                    "rowNumber": 2,
+                    "seatNumber": 1,
+                    "isBooked": false
+                },
+                {
+                    "rowNumber": 2,
+                    "seatNumber": 2,
+                    "isBooked": false
+                },
+                {
+                    "rowNumber": 2,
+                    "seatNumber": 3,
+                    "isBooked": false
+                },
+                {
+                    "rowNumber": 2,
+                    "seatNumber": 4,
+                    "isBooked": false
+                }
+            ]
+        },
+        {
+            "id": "695bea809570e692b99ad50e",
+            "movie": {
+                "ext_id": 12,
+                "title": "The Widening Gyre"
+            },
+            "start": "2026-01-15T17:24:00.000Z",
+            "end": "2026-01-15T19:35:00.000Z",
+            "roomNumber": 5,
+            "tickets": [
+                {
+                    "rowNumber": 1,
+                    "seatNumber": 1,
+                    "isBooked": false
+                },
+                {
+                    "rowNumber": 1,
+                    "seatNumber": 2,
+                    "isBooked": false
+                },
+                {
+                    "rowNumber": 1,
+                    "seatNumber": 3,
+                    "isBooked": false
+                },
+                {
+                    "rowNumber": 1,
+                    "seatNumber": 4,
+                    "isBooked": false
+                },
+                {
+                    "rowNumber": 2,
+                    "seatNumber": 1,
+                    "isBooked": false
+                },
+                {
+                    "rowNumber": 2,
+                    "seatNumber": 2,
+                    "isBooked": false
+                },
+                {
+                    "rowNumber": 2,
+                    "seatNumber": 3,
+                    "isBooked": false
+                },
+                {
+                    "rowNumber": 2,
+                    "seatNumber": 4,
+                    "isBooked": false
+                },
+                {
+                    "rowNumber": 3,
+                    "seatNumber": 1,
+                    "isBooked": false
+                },
+                {
+                    "rowNumber": 3,
+                    "seatNumber": 2,
+                    "isBooked": false
+                },
+                {
+                    "rowNumber": 3,
+                    "seatNumber": 3,
+                    "isBooked": false
+                },
+                {
+                    "rowNumber": 3,
+                    "seatNumber": 4,
+                    "isBooked": false
+                }
+            ]
+        },
+        {
+            "id": "695bea809570e692b99ad318",
+            "movie": {
+                "ext_id": 12,
+                "title": "The Widening Gyre"
+            },
+            "start": "2026-01-15T15:07:00.000Z",
+            "end": "2026-01-15T17:42:00.000Z",
+            "roomNumber": 3,
+            "tickets": [
+                {
+                    "rowNumber": 1,
+                    "seatNumber": 1,
+                    "isBooked": false
+                },
+                {
+                    "rowNumber": 1,
+                    "seatNumber": 2,
+                    "isBooked": false
+                },
+                {
+                    "rowNumber": 1,
+                    "seatNumber": 3,
+                    "isBooked": false
+                },
+                {
+                    "rowNumber": 1,
+                    "seatNumber": 4,
+                    "isBooked": false
+                },
+                {
+                    "rowNumber": 2,
+                    "seatNumber": 1,
+                    "isBooked": false
+                },
+                {
+                    "rowNumber": 2,
+                    "seatNumber": 2,
+                    "isBooked": false
+                },
+                {
+                    "rowNumber": 2,
+                    "seatNumber": 3,
+                    "isBooked": false
+                },
+                {
+                    "rowNumber": 2,
+                    "seatNumber": 4,
+                    "isBooked": false
+                }
+            ]
+        }
+    ],
+    "totalElements": 33
+}
+```
 
-## Support
+#### Invalid Request
+movieId is required.
 
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
+```
+{
+    "message": [
+        "movieId must be an integer number",
+        "movieId should not be empty"
+    ],
+    "error": "Bad Request",
+    "statusCode": 400
+}
+```
 
-## Stay in touch
+### 3. Get Session Counts (Aggregation)
+**Endpoint:** `POST /api/movie-session/_counts`
+#### Valid Request
 
-- Author - [Kamil Myśliwiec](https://twitter.com/kammysliwiec)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
+```
+{
+    "movieIds":[12,443,442,664]
+}
+```
+**Response:**
 
-## License
+```
+{
+    "id442": 39,
+    "id664": 38,
+    "id12": 33,
+    "id443": 0
+}
+```
 
-Nest is [MIT licensed](https://github.com/nestjs/nest/blob/master/LICENSE).
+#### Invalid Request
+
+```
+{
+    "movieIds":[34, "25"]
+}
+```
+**Response:**
+
+```
+{
+    "message": [
+        "each value in movieIds must be a number conforming to the specified constraints"
+    ],
+    "error": "Bad Request",
+    "statusCode": 400
+}
+```
+

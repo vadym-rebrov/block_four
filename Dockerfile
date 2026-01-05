@@ -13,12 +13,13 @@ RUN npm ci
 FROM node:18 as builder
 WORKDIR /app
 COPY --from=build-dependencies /app/node_modules node_modules
-COPY --from=builder /app/resources ./resources
-COPY ../upd .
+COPY resources ./resources
+COPY . .
 RUN npm run build
 
 FROM node:18
 WORKDIR /app
 COPY --from=production-dependencies /app .
 COPY --from=builder /app/dist /app/dist
+COPY --from=builder /app/resources ./resources
 CMD [ "node", "dist/src/main.js" ]

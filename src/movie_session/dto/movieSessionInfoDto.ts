@@ -41,7 +41,7 @@ export class MovieSessionInfoDto {
     end: Date;
 
     @Expose()
-    room_number: number;
+    roomNumber: number;
 
     @Expose()
     @Type(() => TicketInfoDto)

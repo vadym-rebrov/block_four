@@ -14,8 +14,6 @@ import {SaveRoomDto} from "../room/dto/saveRoom.dto";
 export class MovieSessionRepository {
     constructor(
         @InjectModel(MovieSession.name) private readonly sessionModel: Model<MovieSessionDocument>,
-        private readonly roomRepository: RoomRepository,
-        private readonly movieService : MovieService
     ) {}
 
     async getById(id: string): Promise<MovieSession | null> {
@@ -37,44 +35,10 @@ export class MovieSessionRepository {
         });
     }
 
-    async create(data: SaveMovieSessionDto): Promise<string> {
-        if (!data.tickets || data.tickets.length === 0) {
-            const [movie, room, conflictingSession] = await Promise.all([
-                this.movieService.getById(data.movie.ext_id),
-                this.roomRepository.getByRoomNumber(data.room_number),
-                this.getConflictSession(data)
-            ]);
 
-            if (!movie || movie.title !== data.movie.title) {
-                throw new NotFoundException(`Movie with id ${data.movie.ext_id} not found`);
-            }
-
-            if (!room) {
-                throw new NotFoundException(`Room with number ${data.room_number} not found`);
-            }
-
-            if (conflictingSession) {
-                throw new ConflictException(
-                    `Room ${data.room_number} is already booked from ${conflictingSession.start} to ${conflictingSession.end}`
-                );
-            }
-
-            data.tickets = room.seatsTemplate.map(seat => ({
-                rowNumber: seat.rowNumber,
-                seatNumber: seat.seatNumber,
-                isBooked: false,
-            }));
-        }
-
-        return (await this.sessionModel.create(data)).id;
-    }
-
-    private async getConflictSession(data: SaveMovieSessionDto){
-        const start = new Date(data.start);
-        const end = new Date(data.end);
-
+    public async getConflictSession(roomNumber: number, start: Date, end: Date): Promise<MovieSession | null> {
         return this.sessionModel.findOne({
-            room_number: data.room_number,
+            roomNumber: roomNumber,
             $and: [
                 { start: { $lt: end } },
                 { end: { $gt: start } }
@@ -116,9 +80,13 @@ export class MovieSessionRepository {
         return sortedStats;
     }
 
-    async createMany(data: SaveRoomDto[]) : Promise<string []>{
+    async create(data: SaveMovieSessionDto): Promise<MovieSession> {
+        return this.sessionModel.create(data);
+    }
+
+    async createMany(data: SaveMovieSessionDto[]): Promise<string[]> {
         const sessions = await this.sessionModel.insertMany(data);
-        return sessions.map(room => room.id);
+        return sessions.map(s => s.id);
     }
 
     async isEmpty() : Promise<boolean> {

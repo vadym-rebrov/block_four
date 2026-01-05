@@ -1,6 +1,6 @@
 import { Injectable, OnModuleInit, Logger } from '@nestjs/common';
 import { RoomRepository } from '../room/room.repository';
-import * as fs from 'fs/promises'; // Используем promises версию для async/await
+import * as fs from 'fs/promises';
 import * as path from 'path';
 import {MovieSessionRepository} from "../movie_session/movieSession.repository";
 
@@ -13,32 +13,33 @@ export class SeedService implements OnModuleInit {
     constructor(private readonly roomRepository: RoomRepository, private readonly movieSessionRepository: MovieSessionRepository) {}
 
     async onModuleInit() {
-
+        await this.seedRooms();
+        await this.seedMovieSession();
     }
 
     private async seedRooms(){
         if (await this.roomRepository.isEmpty()) {
             this.logger.log('Room collection is empty. Loading seed data from file...');
-            await this.seedCollection(SeedService.ROOM_FILENAME);
+            await this.seedCollection(SeedService.ROOM_FILENAME, this.roomRepository);
         }
     }
 
     private async seedMovieSession(){
         if (await this.movieSessionRepository.isEmpty()) {
             this.logger.log('Movie collection is empty. Loading seed data from file...');
-            await this.seedCollection(SeedService.MOVIE_SESSION_FILENAME);
+            await this.seedCollection(SeedService.MOVIE_SESSION_FILENAME, this.movieSessionRepository);
         }
     }
 
-    private async seedCollection(initDataFilename: string) {
+    private async seedCollection(initDataFilename: string, repository) {
         try {
             const filePath = path.join(process.cwd(), SeedService.DATASET_PATH, initDataFilename);
             const fileData = await fs.readFile(filePath, 'utf-8');
             const roomsToInsert = JSON.parse(fileData);
-            await this.roomRepository.createMany(roomsToInsert);
+            await repository.createMany(roomsToInsert);
             this.logger.log(`Successfully seeded ${roomsToInsert.length}.`);
         } catch (error) {
-            this.logger.error('Failed to seed rooms', error);
+            this.logger.error('Failed to seed: ', error);
         }
     }
 

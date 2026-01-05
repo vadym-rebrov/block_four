@@ -59,10 +59,10 @@ describe('MovieSessionController (Integration)', () => {
     describe('POST /movie-session (Create)', () => {
         const validSessionDto: SaveMovieSessionDto = {
             movie: {
-                ext_id: 101,
-                title: 'Inception',
+                ext_id: 442,
+                title: 'Gone with the Wind'
             },
-            room_number: 1,
+            roomNumber: 1,
             start: new Date(Date.now() + 100000).toISOString(),
             end: new Date(Date.now() + 200000).toISOString(),
         };
@@ -76,8 +76,8 @@ describe('MovieSessionController (Integration)', () => {
             });
 
             mockMovieService.getById.mockResolvedValue({
-                id: 101,
-                title: 'Inception',
+                id:442,
+                title: 'Gone with the Wind',
             });
 
             const response = await request(app.getHttpServer())
@@ -95,8 +95,8 @@ describe('MovieSessionController (Integration)', () => {
             });
 
             mockMovieService.getById.mockResolvedValue({
-                id: 101,
-                title: 'Inception',
+                id: 442,
+                title: 'Gone with the Wind',
             });
 
             const invalidDto = {
@@ -118,7 +118,7 @@ describe('MovieSessionController (Integration)', () => {
                 roomNumber: 1,
                 seatsTemplate: [{ rowNumber: 1, seatNumber: 1 }],
             });
-            mockMovieService.getById.mockResolvedValue({ id: 101, title: 'Inception' });
+            mockMovieService.getById.mockResolvedValue({ id: 442, title: 'Gone with the Wind' });
 
             await request(app.getHttpServer())
                 .post('/movie-session')
@@ -130,7 +130,7 @@ describe('MovieSessionController (Integration)', () => {
                 .send(validSessionDto);
 
             expect(response.status).toBe(409);
-            expect(response.body.message).toMatch(/already booked/);
+            expect(response.body.message).toMatch("Room 1 is busy at this time");
         });
     });
 
@@ -145,7 +145,7 @@ describe('MovieSessionController (Integration)', () => {
             for (let i = 0; i < 3; i++) {
                 await request(app.getHttpServer()).post('/movie-session').send({
                     movie: { ext_id: 101, title: 'Inception' },
-                    room_number: 1,
+                    roomNumber: 1,
                     start: new Date(Date.now() + (i * 1000000)).toISOString(),
                     end: new Date(Date.now() + (i * 1000000) + 500000).toISOString(),
                 });
@@ -199,7 +199,7 @@ describe('MovieSessionController (Integration)', () => {
             mockMovieService.getById.mockImplementation((id) => Promise.resolve({ id, title: 'Movie' }));
 
             const sessionBase = {
-                room_number: 1,
+                roomNumber: 1,
                 start: new Date().toISOString(),
                 end: new Date().toISOString()
             };
@@ -209,7 +209,7 @@ describe('MovieSessionController (Integration)', () => {
                 timeOffset += 100000;
                 await request(app.getHttpServer()).post('/movie-session').send({
                     movie: { ext_id, title: 'Movie' },
-                    room_number: 1,
+                    roomNumber: 1,
                     start: new Date(Date.now() + timeOffset).toISOString(),
                     end: new Date(Date.now() + timeOffset + 50000).toISOString(),
                 });
@@ -227,7 +227,7 @@ describe('MovieSessionController (Integration)', () => {
                 .post('/movie-session/_counts')
                 .send(countDto);
 
-            expect(response.status).toBe(201);
+            expect(response.status).toBe(200);
             expect(response.body).toEqual(expect.objectContaining({
                 id10: 2,
                 id20: 1,
