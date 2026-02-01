@@ -16,6 +16,7 @@ services:
       - PORT=3500
       - MONGO_ADDRESS=mongodb://mongo:27017/movie-session-db
       - MOVIE_SERVICE_URL=http://host.docker.internal:8080/api/movie
+      - SERVICE_NAME=movie-session-service
 
   mongo:
     image: mongo:8.0.4
