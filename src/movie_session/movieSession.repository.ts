@@ -2,13 +2,13 @@ import {ConflictException, Injectable, NotFoundException} from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import {MovieSession, MovieSessionDocument} from './movieSession.schema';
-import {SaveMovieSessionDto} from "./dto/saveMovieSession.dto";
-import {Room, RoomDocument} from "../room/room.schema";
-import {RoomRepository} from "../room/room.repository";
-import {MovieService} from "../movie/movie.service";
-import {MovieSessionQueryDto} from "./dto/movieSessionQueryDto";
-import {CountByIdArrayDto} from "./dto/countByIdArrayDto";
-import {SaveRoomDto} from "../room/dto/saveRoom.dto";
+import {SaveMovieSessionDto} from './dto/saveMovieSession.dto';
+import {Room, RoomDocument} from '../room/room.schema';
+import {RoomRepository} from '../room/room.repository';
+import {MovieService} from '../movie/movie.service';
+import {MovieSessionQueryDto} from './dto/movieSessionQueryDto';
+import {CountByIdArrayDto} from './dto/countByIdArrayDto';
+import {SaveRoomDto} from '../room/dto/saveRoom.dto';
 
 @Injectable()
 export class MovieSessionRepository {

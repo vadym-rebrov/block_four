@@ -1,10 +1,10 @@
-import {Body, Controller, Get, HttpCode, Post, Query} from "@nestjs/common";
-import {MovieSessionService} from "./movieSession.service";
-import {SaveMovieSessionDto} from "./dto/saveMovieSession.dto";
-import {MovieSessionQueryDto} from "./dto/movieSessionQueryDto";
-import {CountByIdArrayDto} from "./dto/countByIdArrayDto";
-import {MovieSessionQueryResponseDto} from "./dto/movieSessionQueryResponseDto";
-import {CountByIdArrayResponseDto} from "./dto/countByIdArrayResponseDto";
+import {Body, Controller, Get, HttpCode, Post, Query} from '@nestjs/common';
+import {MovieSessionService} from './movieSession.service';
+import {SaveMovieSessionDto} from './dto/saveMovieSession.dto';
+import {MovieSessionQueryDto} from './dto/movieSessionQueryDto';
+import {CountByIdArrayDto} from './dto/countByIdArrayDto';
+import {MovieSessionQueryResponseDto} from './dto/movieSessionQueryResponseDto';
+import {CountByIdArrayResponseDto} from './dto/countByIdArrayResponseDto';
 
 @Controller('movie-session')
 export class MovieSessionController{

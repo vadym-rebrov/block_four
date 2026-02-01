@@ -1,9 +1,9 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { MongooseModule } from '@nestjs/mongoose';
-import {MovieSessionModule} from "./movie_session/movieSession.module";
-import {SeedService} from "./seed/seed.service";
-import {RoomModule} from "./room/room.module";
+import {MovieSessionModule} from './movie_session/movieSession.module';
+import {SeedService} from './seed/seed.service';
+import {RoomModule} from './room/room.module';
 
 @Module({
   imports: [

@@ -130,7 +130,7 @@ describe('MovieSessionController (Integration)', () => {
                 .send(validSessionDto);
 
             expect(response.status).toBe(409);
-            expect(response.body.message).toMatch("Room 1 is busy at this time");
+            expect(response.body.message).toMatch('Room 1 is busy at this time');
         });
     });
 

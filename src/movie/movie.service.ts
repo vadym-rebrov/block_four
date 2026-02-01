@@ -1,8 +1,8 @@
 import { Injectable } from '@nestjs/common';
 import { HttpService } from '@nestjs/axios';
 import { firstValueFrom } from 'rxjs';
-import {MovieInfoDto} from "./dto/movieInfoDto";
-import {ConfigService} from "@nestjs/config";
+import {MovieInfoDto} from './dto/movieInfoDto';
+import {ConfigService} from '@nestjs/config';
 
 @Injectable()
 export class MovieService {

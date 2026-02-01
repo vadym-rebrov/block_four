@@ -1,5 +1,5 @@
 import { Expose, Type } from 'class-transformer';
-import {CountryInfoDto} from "../../country/dto/countryInfoDto";
+import {CountryInfoDto} from '../../country/dto/countryInfoDto';
 
 export class DirectorInfoDto {
     @Expose()

@@ -1,6 +1,6 @@
-import {Expose, Type} from "class-transformer";
-import {DirectorInfoDto} from "../../director/dto/directorInfoDto";
-import {GenreInfoDto} from "../../genre/dto/genreInfoDto";
+import {Expose, Type} from 'class-transformer';
+import {DirectorInfoDto} from '../../director/dto/directorInfoDto';
+import {GenreInfoDto} from '../../genre/dto/genreInfoDto';
 
 export class MovieInfoDto{
     @Expose()

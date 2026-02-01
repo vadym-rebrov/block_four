@@ -11,7 +11,7 @@ import {
     IsNotEmpty,
     IsNumber
 } from 'class-validator';
-import {IsAfter} from "../../common/validators/isAfter";
+import {IsAfter} from '../../common/validators/isAfter';
 
 
 export class TicketDto {

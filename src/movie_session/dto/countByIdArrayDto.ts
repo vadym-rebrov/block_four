@@ -1,4 +1,4 @@
-import {IsArray, IsNotEmpty, IsNumber, IsOptional} from "class-validator";
+import {IsArray, IsNotEmpty, IsNumber, IsOptional} from 'class-validator';
 
 export class CountByIdArrayDto {
     @IsArray()

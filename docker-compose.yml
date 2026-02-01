@@ -4,26 +4,28 @@ services:
     build: .
     restart: on-failure
     ports:
-      - '3000:3000'
+      - '3500:3500'
+    container_name: movie-session-service
     depends_on:
       mongo:
         condition: service_healthy
     networks:
-      - default
+      - shared-kafka-net
     environment:
       - HOST=0.0.0.0
-      - PORT=3000
+      - PORT=3500
       - MONGO_ADDRESS=mongodb://mongo:27017/movie-session-db
       - MOVIE_SERVICE_URL=http://host.docker.internal:8080/api/movie
 
   mongo:
     image: mongo:8.0.4
+    container_name: mongo
     ports:
       - '27018:27017'
     volumes:
       - ./docker/data/mongo/db:/data/db
     networks:
-      - default
+      - shared-kafka-net
     healthcheck:
       test: ["CMD", "mongosh", "--eval", "db.runCommand('ping').ok"]
       interval: 10s
@@ -31,5 +33,5 @@ services:
       retries: 5
 
 networks:
-  default:
-    driver: bridge
+  shared-kafka-net:
+    external: true

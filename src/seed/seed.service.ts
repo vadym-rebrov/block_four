@@ -2,14 +2,14 @@ import { Injectable, OnModuleInit, Logger } from '@nestjs/common';
 import { RoomRepository } from '../room/room.repository';
 import * as fs from 'fs/promises';
 import * as path from 'path';
-import {MovieSessionRepository} from "../movie_session/movieSession.repository";
+import {MovieSessionRepository} from '../movie_session/movieSession.repository';
 
 @Injectable()
 export class SeedService implements OnModuleInit {
     private readonly logger = new Logger(SeedService.name);
-    private static readonly DATASET_PATH = "resources/init_data";
-    private static readonly ROOM_FILENAME = "room.init.json";
-    private static readonly MOVIE_SESSION_FILENAME = "movieSession.init.json";
+    private static readonly DATASET_PATH = 'resources/init_data';
+    private static readonly ROOM_FILENAME = 'room.init.json';
+    private static readonly MOVIE_SESSION_FILENAME = 'movieSession.init.json';
     constructor(private readonly roomRepository: RoomRepository, private readonly movieSessionRepository: MovieSessionRepository) {}
 
     async onModuleInit() {

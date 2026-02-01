@@ -1,4 +1,4 @@
-import {MovieSessionInfoDto} from "./movieSessionInfoDto";
+import {MovieSessionInfoDto} from './movieSessionInfoDto';
 
 export class MovieSessionQueryResponseDto{
     list : MovieSessionInfoDto[];

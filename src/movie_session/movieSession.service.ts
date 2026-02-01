@@ -1,15 +1,15 @@
-import {ConflictException, Injectable, NotFoundException} from "@nestjs/common";
-import {MovieSessionRepository} from "./movieSession.repository";
+import {ConflictException, Injectable, NotFoundException} from '@nestjs/common';
+import {MovieSessionRepository} from './movieSession.repository';
 
-import {SaveMovieSessionDto} from "./dto/saveMovieSession.dto";
-import {MovieSessionQueryDto} from "./dto/movieSessionQueryDto";
-import {CountByIdArrayDto} from "./dto/countByIdArrayDto";
-import {CountByIdArrayResponseDto} from "./dto/countByIdArrayResponseDto";
-import {plainToInstance} from "class-transformer";
-import {MovieSessionInfoDto} from "./dto/movieSessionInfoDto";
-import {MovieSessionQueryResponseDto} from "./dto/movieSessionQueryResponseDto";
-import {RoomRepository} from "../room/room.repository";
-import {MovieService} from "../movie/movie.service";
+import {SaveMovieSessionDto} from './dto/saveMovieSession.dto';
+import {MovieSessionQueryDto} from './dto/movieSessionQueryDto';
+import {CountByIdArrayDto} from './dto/countByIdArrayDto';
+import {CountByIdArrayResponseDto} from './dto/countByIdArrayResponseDto';
+import {plainToInstance} from 'class-transformer';
+import {MovieSessionInfoDto} from './dto/movieSessionInfoDto';
+import {MovieSessionQueryResponseDto} from './dto/movieSessionQueryResponseDto';
+import {RoomRepository} from '../room/room.repository';
+import {MovieService} from '../movie/movie.service';
 
 @Injectable()
 export class MovieSessionService {
