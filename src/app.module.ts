@@ -4,6 +4,7 @@ import { MongooseModule } from '@nestjs/mongoose';
 import {MovieSessionModule} from './movie_session/movieSession.module';
 import {SeedService} from './seed/seed.service';
 import {RoomModule} from './room/room.module';
+import {AuthModule} from "./security/auth.module";
 
 @Module({
   imports: [
@@ -11,7 +12,7 @@ import {RoomModule} from './room/room.module';
       isGlobal: true,
     }),
     MongooseModule.forRootAsync({
-      imports: [ConfigModule],
+      imports: [ConfigModule, AuthModule],
       inject: [ConfigService],
       useFactory: (configService: ConfigService) => ({
         uri: configService.get<string>('MONGO_ADDRESS'),
