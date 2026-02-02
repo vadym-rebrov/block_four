@@ -8,7 +8,7 @@ on:
 env:
   REGISTRY: ghcr.io
   IMAGE_NAME: ${{ github.repository_owner }}/movie-session-service
-  DEPLOY_REPO: ${{ github.repository_owner }}/cloud-sample-deployment
+  DEPLOY_REPO: ${{ github.repository_owner }}/cloud-deploy
 
 jobs:
   build-and-push:
