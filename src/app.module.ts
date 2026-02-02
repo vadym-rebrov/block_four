@@ -5,6 +5,8 @@ import {MovieSessionModule} from './movie_session/movieSession.module';
 import {SeedService} from './seed/seed.service';
 import {RoomModule} from './room/room.module';
 import {AuthModule} from "./security/auth.module";
+import { TerminusModule } from '@nestjs/terminus';
+import { HealthController } from './health/health.controller';
 
 @Module({
   imports: [
@@ -19,11 +21,12 @@ import {AuthModule} from "./security/auth.module";
       }),
     }),
     MovieSessionModule,
-    RoomModule
-
+    RoomModule,
+    TerminusModule
   ],
   providers:[
     SeedService
   ],
+  controllers: [HealthController]
 })
 export class AppModule {}
